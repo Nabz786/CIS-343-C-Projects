@@ -1,0 +1,2 @@
+How to malloc char** table?
+https://stackoverflow.com/questions/7812805/how-to-malloc-char-table
