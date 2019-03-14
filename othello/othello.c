@@ -36,7 +36,7 @@ void displayBoard(char board[][SIZE])
 void initializeBoard(char board[][SIZE])
 {
 	//We start by setting all positions on the board to -
-	
+
 	for(int i = 0; i < SIZE; i++) {
 		for(int j = 0; j < SIZE; j++) {
 			board[i][j] = EMPTY;
@@ -44,7 +44,7 @@ void initializeBoard(char board[][SIZE])
 	}
 
 	//Set the positions of the four initial pieces
-	
+
 	board[3][3] = BLACK;
 	board[3][4] = WHITE;
 	board[4][3] = WHITE;
@@ -69,52 +69,53 @@ bool isValidMove(char board[][SIZE], int row, int col, char disc)
 
 	//Check up
 	for(int i = row - 1; i > -1; i--) {
-		 if(board[i][col] != disc && board[i][col]!= EMPTY) {
-			 if(board[i-1][col] == disc) {
-				 printf("\nU\n");
-				return true;
-			 }
-			 continue;
-		 } else if(board[i][col] == EMPTY || row == 0) {
+		if(i -1 < 0) {
 			break;
-		 }
+		}
+		if(board[i][col] != disc && board[i][col]!= EMPTY 
+				&& board[i-1][col]==disc) {
+			return true;
+		} else if(board[i][col] == EMPTY || board[i][col] == disc) {
+			break;
+		}
 	}
 
 
 	//Check Down
 	for(int i = row + 1; i < SIZE; i++) {
-		if(board[i][col] != disc && board[i][col]!= EMPTY) {
-			if(board[i+1][col] == disc) {
-				printf("\nD\n");
-				return true;
-			}
-		} else if(board[i][col] == EMPTY || row == SIZE -1) {
+		if (i + 1 >= SIZE) {
+			break;
+		}
+		if(board[i][col] != disc && board[i][col]!= EMPTY 
+				&& board[i+1][col]==disc) {
+			return true;
+		} else if(board[i][col] == EMPTY || board[i][col] == disc) {
 			break;
 		}
 	}
 
 	//Check Left
 	for(int i = col -1; i > -1; i--) {
-		if(board[row][i] != disc && board[row][i]!= EMPTY) {
-			if(board[row][i-1] == disc) {
-				printf("\nL\n");
-				return true;
-			}
-			continue;
-		} else if(board[row][i] == EMPTY || col == 0) {
+		if(i-1 < 0) {
+			break;
+		}
+		if(board[row][i] != disc && board[row][i]!= EMPTY 
+				&& board[row][i-1] == disc) {
+			return true;
+		} else if(board[row][i] == EMPTY || board[row][i]==disc) {
 			break;
 		}
 	}
 
 	//Check Right
 	for(int i = col + 1; i < SIZE; i++) {
-		if(board[row][i] != disc && board[row][i]!= EMPTY) {
-			if(board[row][i+1] == disc) {
-				printf("\nR\n");
-				return true;
-			}
-			continue;
-		} else if (board[row][i] == EMPTY || col == SIZE - 1) {
+		if(i+1 > SIZE) {
+			break;
+		}
+		if(board[row][i] != disc && board[row][i]!= EMPTY 
+				&& board[row][i+1]==disc) {
+			return true;
+		} else if (board[row][i] == EMPTY || board[row][i] == disc) {
 			break;
 		}
 	}
@@ -127,24 +128,29 @@ bool isValidMove(char board[][SIZE], int row, int col, char disc)
 	//Check Diag-Up-Left
 	colIter = col + 1;
 	for(int i = row + 1; i < SIZE; i++) {
+		if(colIter+1 >= SIZE || i + 1 >=SIZE) {
+			break;
+		}
+
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY 
 				&& board[i+1][colIter+1] == disc) {
-			printf("\nU-L\n");
 			return true;
-		} else if (board[i][colIter] == EMPTY) {
+		} else if (board[i][colIter] == EMPTY || board[i][colIter]==disc) {
 			break;
 		}
 		colIter++;
 	}
-	
+
 	//Check Diag Up-right
 	colIter = col - 1;
 	for(int i = row + 1; i < SIZE; i++) {
+		if(colIter -1 < 0 || i + 1 >= SIZE) {
+			break;
+		}
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY 
 				&& board[i+1][colIter - 1] == disc) {
-			printf("\nU-R\n");
 			return true;
-		} else if (board[i][colIter] == EMPTY) {
+		} else if (board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
 		}
 		colIter--;
@@ -153,11 +159,14 @@ bool isValidMove(char board[][SIZE], int row, int col, char disc)
 	//Cjeck Diag bottom-right
 	colIter = col + 1;
 	for(int i = row - 1; i > -1; i--) {
+		if(colIter -1 >= SIZE || i - 1 < 0) {
+			break;
+		}
+
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY 
 				&& board[i-1][colIter+1] == disc) {
-			printf("\nD-R\n");
 			return true;
-		} else if(board[i][colIter] == EMPTY) {
+		} else if(board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
 		}	
 		colIter++;
@@ -166,16 +175,19 @@ bool isValidMove(char board[][SIZE], int row, int col, char disc)
 	//Check Diag-Bottom-Left
 	colIter = col - 1;
 	for(int i = row -1; i > -1; i--) {
+		if(colIter -1 < 0 || i -1 <0) {
+			break;
+		}
+
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY 
 				&& board[i-1][colIter-1] == disc) {
-			printf("\nD-L\n");
 			return true;
-		} else if(board[i][colIter] == EMPTY) {
+		} else if(board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
 		}
 		colIter--;
 	}
-	
+
 	return false;
 }
 
@@ -190,91 +202,115 @@ bool isValidMove(char board[][SIZE], int row, int col, char disc)
 void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 {
 	board[row][col] = disc;
+
+	/* Number of times to write in a direction*/
 	int numWrite = 0;
+
+	/* Column iterator when iterating diagonally*/
 	int colIter = 0;
+
+
+	//To check up, down, left and right
+	//We simply loop away from our newly placed cell
+	//Checking to see if we find another disc of the same player
+	//With enemies bounded between the two
+	//If we do, We write in the direction n times
 
 	//Check move up
 	for(int i = row + 1; i < SIZE; i++) {
 		numWrite++;
+		if(i + 1 >= SIZE) {
+			break;
+		}
 		if(board[i][col] != disc && board[i][col]!= EMPTY &&
 				board[i+1][col] == disc) {
-			printf("\nUp\n");
 			for(int j = row + 1; j < SIZE; j++) {
 				if( numWrite > 0) {
 					board[j][col] = disc;
 					numWrite--;
 				}
 			}
-		} else if (board[i][col] == EMPTY) {
+		} else if (board[i][col] == EMPTY || board[i][col] == disc) {
 			break;
-		}
+		} 
 	}
 
 	numWrite = 0;
 	//Check Move down
 	for(int i = row - 1; i > -1; i--) {
 		numWrite++;
+		if(i - 1 < 0) {
+			break;
+		}
 		if(board[i][col] != disc && board[i][col] != EMPTY  && 
 				board[i-1][col] == disc) {
-			printf("\nDown\n");
-			printf("\n%d\n", numWrite);
 			for(int j = row - 1; j > -1; j--) {
 				if(numWrite > 0) {
 					board[j][col] = disc;
 					numWrite--;
 				}
 			}
-		} else if (board[i][col] == EMPTY) {
+		} else if (board[i][col] == EMPTY || board[i][col] == disc) {
 			break;
-		}
+		} 
 	}
 
 	numWrite = 0;
 	//Check Move right
 	for(int i = col - 1; i > -1; i--) {
 		numWrite++;
+		if(i -1 < 0) {
+			break;
+		}
 		if(board[row][i] != disc && board[row][i] != EMPTY &&
-			       	board[row][i-1] == disc) {
-			printf("\nRight\n");
-			printf("\n%d\n", numWrite);
+				board[row][i-1] == disc) {
 			for(int j = col - 1; j > -1; j--) {
 				if(numWrite > 0) {
 					board[row][j] = disc;
 					numWrite--;
 				}
 			}
-		} else if (board[row][i] == EMPTY) {
+		} else if (board[row][i] == EMPTY || board[row][i] == disc) {
 			break;
-		}
+		} 
 	}
 
 	numWrite = 0;
 	//Check Move left
 	for(int i = col + 1; i < SIZE; i++) {
 		numWrite++;
+		if(i + 1 >= SIZE) {
+			break;
+		}
 		if(board[row][i] != disc && board[row][i] != EMPTY &&
-			       	board[row][i+1] == disc) {
-			printf("\nLeft\n");
-			printf("\n%d\n", numWrite);
+				board[row][i+1] == disc) {
 			for(int j = col + 1; j < SIZE; j++) {
 				if(numWrite > 0) {
 					board[row][j] = disc;
 					numWrite--;
 				}
 			}
-		} else if(board[row][i] == EMPTY) {
+		} else if(board[row][i] == EMPTY || board[row][i] == disc) {
 			break;
-		}
+		} 
 	}
+
+
+	//To perform Diagonal Checks we use col iter 
+	//So that we can iterate through columns and rows
+	//at the same time. The writing functionality
+	//is the same as the basic moves above
 
 	numWrite = 0;
 	colIter = col - 1;
 	//Check Up Right
 	for(int i = row + 1; i < SIZE; i++) {
 		numWrite++;
+		if(colIter-1 < 0 || i + 1 >= SIZE){
+			break;
+		}
 		if(board[i][colIter] != disc && board[i][colIter]!=EMPTY &&
-			       	board[i+1][colIter-1] == disc) {
-			printf("\nUp-Right\n");
+				board[i+1][colIter-1] == disc) {
 			int colTemp = col - 1;
 			for(int j = row + 1; j < SIZE; j++) {
 				if(numWrite > 0) {
@@ -283,7 +319,7 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 					numWrite--;
 				}
 			}
-		} else if (board[i][colIter] == EMPTY) {
+		} else if (board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
 		}
 		colIter--;
@@ -294,9 +330,12 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 	//Check Up Left
 	for(int i = row + 1; i < SIZE; i++) {
 		numWrite++;
+		if(colIter + 1 >= SIZE || i + 1 >= SIZE) {
+			break;
+		}
+
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY && 
 				board[i+1][colIter+1] == disc) {
-			printf("\nUp-Left\n");
 			int colTemp = col + 1;
 			for(int j = row + 1; j < SIZE; j++) {
 				if(numWrite > 0) {
@@ -305,9 +344,9 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 					numWrite--;
 				}
 			}
-		} else if(board[i][colIter] == EMPTY) {
+		} else if(board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
-		}
+		} 
 		colIter++;
 	}
 
@@ -316,9 +355,11 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 	//Check down-left
 	for(int i = row - 1; i > -1; i--) {
 		numWrite++;
+		if(colIter + 1 >= SIZE || i - 1 < 0) {
+			break;
+		}
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY 
 				&& board[i-1][colIter+1] == disc) {
-			printf("\nDown-left\n");
 			int colTemp = col + 1;
 			for(int j = row - 1; j > -1; j--) {
 				if(numWrite > 0) {
@@ -327,9 +368,9 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 					numWrite--;
 				}
 			}
-		}else if(board[i][colIter] == EMPTY) {
+		}else if(board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
-		}
+		} 
 		colIter++;
 	}
 
@@ -338,9 +379,11 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 	//Check down-right
 	for(int i = row - 1; i > -1; i--) {
 		numWrite++;
+		if(colIter - 1 < 0 || i - 1 < 0) {
+			break;
+		}
 		if(board[i][colIter] != disc && board[i][colIter] != EMPTY 
 				&& board[i-1][colIter-1] == disc) {
-			printf("\nDown-right\n");
 			int colTemp = col - 1;
 			for(int j = row - 1; j > -1; j--) {
 				if(numWrite > 0) {
@@ -349,9 +392,9 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
 					numWrite--;
 				}
 			}
-		}else if (board[i][colIter] == EMPTY) {
+		}else if (board[i][colIter] == EMPTY || board[i][colIter] == disc) {
 			break;
-		}
+		} 
 		colIter--;
 	}
 }
@@ -363,9 +406,11 @@ void placeDiscAt(char board[][SIZE], int row, int col, char disc)
  **********************************************************************/
 bool isValidMoveAvailable(char board[][SIZE], char disc)
 {
+	//See if we can place a disc at any position on the board
+	//If we can return true, else return false
 	for(int i = 0; i < SIZE; i++) {
 		for(int j = 0; j < SIZE; j++) {
-			if(isValidMove(board, i + 1, j + 1, disc)) {
+			if(isValidMove(board, i, j, disc)) {
 				return true;
 			}
 		}
@@ -381,6 +426,8 @@ bool isValidMoveAvailable(char board[][SIZE], char disc)
  *********************************************************************/
 bool isBoardFull(char board[][SIZE])
 {
+	//Loop through the entire board to see if we can find an 
+	//empty spot, if we do the board is not empty
 	for(int i = 0; i < SIZE; i++) {
 		for(int j = 0; j < SIZE; j++) {
 			if(board[i][j] == EMPTY) {
@@ -399,8 +446,10 @@ bool isBoardFull(char board[][SIZE])
  *********************************************************************/
 bool isGameOver(char board[][SIZE])
 {
-	if(isBoardFull(board) || !isValidMoveAvailable(board, WHITE) || 
-			!isValidMoveAvailable(board, BLACK)) {
+	//The board either has to be full, or there cannot be any 
+	//moves for both players to be gameover
+	if(isBoardFull(board) || (!isValidMoveAvailable(board, WHITE) && 
+		!isValidMoveAvailable(board, BLACK))) {
 		return true;
 	}
 
@@ -414,9 +463,13 @@ bool isGameOver(char board[][SIZE])
  *********************************************************************/
 char checkWinner(char board[][SIZE])
 {
+	/** Black disc count**/
 	int bCount = 0;
+
+	/** White disc count**/
 	int wCount = 0;
-	
+
+	//Loop through board counting each players discs
 	for(int i = 0; i < SIZE; i++) {
 		for(int j = 0; j < SIZE; j++) {
 			if(board[i][j] == 'W') {
@@ -426,7 +479,8 @@ char checkWinner(char board[][SIZE])
 			}	
 		}
 	}
-	
+
+	//The player with the larger disc count is the winner
 	if(wCount > bCount) {
 		return WHITE;
 	} else if (bCount > wCount) {
